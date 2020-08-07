@@ -1,6 +1,32 @@
 /* SCSS HEX Variables*/
 
-$vivid-sky-blue: #44ccffff;
-$isabelline: #eee4e1ff;
-$medium-aquamarine: #49dcb1ff;
-$outer-space-crayola: #343f3eff;
+$color-accent: #44ccffff; // vivid-sky-blue
+$color-bg: #eee4e1ff; // isabelline
+$color-brand: #49dcb1ff; // medium-aquamarine
+$color-text: #343f3eff; // outer-space-crayola
+$color-light-shades: #ffffff; //White
+
+/* General styles */
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: fantasy;
+}
+
+h1, h2, h3, h4, h5, h6, p{
+    color: $color-text;
+}
+
+h1{
+    font-size: 36px;
+}
+
+h2{
+    font-size: 24px;
+}
+
+h3{
+    font-size: 20px;
+}
