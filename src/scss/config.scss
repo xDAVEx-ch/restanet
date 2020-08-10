@@ -8,6 +8,14 @@ $color-light-shades: #ffffff; //White
 
 /* General styles */
 
+:root{
+    --color-accent: #44ccffff;
+    --color-bg: #eee4e1ff;
+    --color-brand: #49dcb1ff;
+    --color-text: #343f3efft;
+    --color-light-shades: #ffffff;
+}
+
 *{
     box-sizing: border-box;
     padding: 0;
