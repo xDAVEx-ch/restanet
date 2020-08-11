@@ -88,6 +88,8 @@ class Controls extends HTMLElement {
                 <button id="find" class="find" type="button">Buscar</button>
             </form>
         `;
+        this.inputs = this.shadowRoot.querySelectorAll('input');
+
         const findButton = this.shadowRoot.getElementById('find');
         const locatedUserBtn = this.shadowRoot.getElementById('locate-me');
         locatedUserBtn.addEventListener('click', this.locateUser.bind(this));
@@ -103,42 +105,56 @@ class Controls extends HTMLElement {
             }
 
             this.userLocation = coords;
+            this.changeAttribute();
 
         }, error => alert('No es posible usar su ubicación, por favor, inserte su una manualmente'));
     }
 
-    inputValidation(inputs) {
+    changeAttribute(){
 
-        if (inputs[0].value.trim() === '') {
+        if(this.userLocation){
+            this.inputs[1].setAttribute('placeholder', 'Usando mi ubicación');
+        } else{
+            this.inputs[1].removeAttribute('placeholder');
+        }
+    }
+
+    inputValidation() {
+
+        if (this.inputs[0].value.trim() === '') {
             throw new Error('Necesita insertar un tipo de comida en el primer campo');
         }
 
-        if (inputs[1].value.trim() === '' && this.userLocation === null) {
+        if (this.inputs[1].value.trim() === '' && this.userLocation === null) {
             throw new Error('Necesita usar una ubicación, puede ser manual o usando el botton: "Mi ubicación"');
         }
     }
 
     findPlacesHandler() {
-
-        const inputs = this.shadowRoot.querySelectorAll('input');
         
         try {
-            this.inputValidation(inputs);
-            this.getInformation(inputs);
+            this.inputValidation(this.inputs);
+            this.getInformation(this.inputs);
         } catch (error) {
             alert(error.message);
         }
     }
 
-    async getInformation(inputs) {
+    async getInformation() {
 
         let recommendations = null;
+        
+        if(this.userLocation && this.inputs[1].value === ''){
+            const {xLong: longitude, yLat: latitude} = this.userLocation;
+            const parameter = `${latitude},${longitude}`;
 
-        if(this.userLocation){
-            recommendations = await FourSquareAPIService.call(['ll'+this.userLocation, inputs[0].value]);
+            //Concat parameter ll to the FourSquareAPI
+            recommendations = await FourSquareAPIService.call(['ll='+parameter, this.inputs[0].value]);
         } else {
             //Concat parameter near to the FourSquareAPI
-            recommendations = await FourSquareAPIService.call(['near='+inputs[1].value, inputs[0].value]);
+            recommendations = await FourSquareAPIService.call(['near='+this.inputs[1].value, this.inputs[0].value]);
+            this.userLocation = null;
+            this.changeAttribute();
         }
 
         console.log(recommendations);
