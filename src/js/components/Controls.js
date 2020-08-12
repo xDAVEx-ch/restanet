@@ -13,7 +13,7 @@ class Controls extends HTMLElement {
                     display: flex;
                     flex-direction: column;
                     padding: 20px;
-                    width: 60%;
+                    margin: 0 auto;
                 }
 
                 label, input, button /*Mover a config css*/{
@@ -38,6 +38,7 @@ class Controls extends HTMLElement {
                 .group{
 
                     margin: 15px 0;
+                    width: 80%;
                 }
 
                 button{
