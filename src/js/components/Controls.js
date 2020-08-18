@@ -1,5 +1,5 @@
-import { FourSquareAPIService } from "../services/FourSquareAPIService";
-class Controls extends HTMLElement {
+import { FourSquareStore } from "../stores/FourSquareStore";
+export class Controls extends HTMLElement {
 
     constructor() {
         super();
@@ -150,15 +150,25 @@ class Controls extends HTMLElement {
             const parameter = `${latitude},${longitude}`;
 
             //Concat parameter ll to the FourSquareAPI
-            recommendations = await FourSquareAPIService.call(['ll='+parameter, this.inputs[0].value]);
+            recommendations = await FourSquareStore.retrive(['ll='+parameter, this.inputs[0].value]);
+            this.createCustomEvent(recommendations);
         } else {
             //Concat parameter near to the FourSquareAPI
-            recommendations = await FourSquareAPIService.call(['near='+this.inputs[1].value, this.inputs[0].value]);
+            recommendations = await FourSquareStore.retrive(['near='+this.inputs[1].value, this.inputs[0].value]);
+            this.createCustomEvent(recommendations);
             this.userLocation = null;
             this.changeAttribute();
         }
+    }
 
-        console.log(recommendations);
+    createCustomEvent(recommendations){
+        const controlsEvent = new CustomEvent('ready-data',{
+            bubbles: true,  // bubble event to containing elements
+            composed: true, // let the event pass through the shadowDOM boundary
+            detail: recommendations.response.groups[0] // Holds an object within the resulting items
+        });
+
+        this.dispatchEvent(controlsEvent);
     }
 }
 
