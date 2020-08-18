@@ -1,11 +1,22 @@
 import { FourSquareAPIService } from "../services/FourSquareAPIService";
 
-const FourSquareStore = (() =>{
+export const FourSquareStore = (() =>{
+    // Private methods and variables can be defined isolated in the scope of the Service/Store
+
+    let data = {
+        venues: []
+    };
 
     // All public methods and variables are available in the controller
     const controller = {
 
-        data: [],
+        get venues() {
+            return data.venues;
+        },
+
+        set venues(venues) {
+            data.venues = venues;
+        },
 
         retrive(URLParameter){
             return new Promise((resolve, rejec) =>{
