@@ -147,11 +147,11 @@ export class Controls extends HTMLElement {
 
         if (this.userLocation && this.inputs[1].value === '') {
             
-            recommendations = await FourSquareStore.retrive(this.createParameter());
+            recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore');
             console.log(recommendations);
             this.createCustomEvent(recommendations);
         } else {
-            recommendations = await FourSquareStore.retrive(this.createParameter());
+            recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore');
             this.createCustomEvent(recommendations);
             this.userLocation = null;
             this.changeAttribute();

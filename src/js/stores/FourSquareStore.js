@@ -18,9 +18,9 @@ export const FourSquareStore = (() =>{
             data.venues = venues;
         },
 
-        retrive(URLParameter){
+        retrive(urlParts, newEndpoint, idParameter=''){
             return new Promise((resolve, rejec) =>{
-                FourSquareAPIService.call(URLParameter).then(data =>{
+                FourSquareAPIService.call(urlParts, newEndpoint, idParameter).then(data =>{
                     resolve(data);
                 });
             })
