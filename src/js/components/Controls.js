@@ -99,7 +99,7 @@ export class Controls extends HTMLElement {
 
     locateUser() {
 
-        navigator.geolocation.getCurrentPosition(position =>{
+        navigator.geolocation.getCurrentPosition(position => {
             const coords = {
                 xLong: position.coords.longitude,
                 yLat: position.coords.latitude
@@ -111,11 +111,11 @@ export class Controls extends HTMLElement {
         }, error => alert('No es posible usar su ubicación, por favor, inserte su una manualmente'));
     }
 
-    changeAttribute(){
+    changeAttribute() {
 
-        if(this.userLocation){
+        if (this.userLocation) {
             this.inputs[1].setAttribute('placeholder', 'Usando mi ubicación');
-        } else{
+        } else {
             this.inputs[1].removeAttribute('placeholder');
         }
     }
@@ -132,7 +132,7 @@ export class Controls extends HTMLElement {
     }
 
     findPlacesHandler() {
-        
+
         try {
             this.inputValidation(this.inputs);
             this.getInformation(this.inputs);
@@ -144,25 +144,38 @@ export class Controls extends HTMLElement {
     async getInformation() {
 
         let recommendations = null;
-        
-        if(this.userLocation && this.inputs[1].value === ''){
-            const {xLong: longitude, yLat: latitude} = this.userLocation;
-            const parameter = `${latitude},${longitude}`;
 
-            //Concat parameter ll to the FourSquareAPI
-            recommendations = await FourSquareStore.retrive(['ll='+parameter, this.inputs[0].value]);
+        if (this.userLocation && this.inputs[1].value === '') {
+            
+            recommendations = await FourSquareStore.retrive(this.createParameter());
+            console.log(recommendations);
             this.createCustomEvent(recommendations);
         } else {
-            //Concat parameter near to the FourSquareAPI
-            recommendations = await FourSquareStore.retrive(['near='+this.inputs[1].value, this.inputs[0].value]);
+            recommendations = await FourSquareStore.retrive(this.createParameter());
             this.createCustomEvent(recommendations);
             this.userLocation = null;
             this.changeAttribute();
         }
     }
 
-    createCustomEvent(recommendations){
-        const controlsEvent = new CustomEvent('ready-data',{
+    createParameter() {
+
+        let parameters = null;
+
+        if (this.userLocation && this.inputs[1].value === '') {
+            const { xLong: longitude, yLat: latitude } = this.userLocation;
+            const coordenates = `${latitude},${longitude}`;
+
+            //Concat ll and query parameters to the FourSquareAPI
+            return parameters = ['ll=' + coordenates, '&query=' + this.inputs[0].value];
+        } else {
+            //Concat near and query parameters to the FourSquareAPI
+            return parameters = ['near=' + this.inputs[1].value, '&query=' + this.inputs[0].value];
+        }
+    }
+
+    createCustomEvent(recommendations) {
+        const controlsEvent = new CustomEvent('ready-data', {
             bubbles: true,  // bubble event to containing elements
             composed: true, // let the event pass through the shadowDOM boundary
             detail: recommendations.response.groups[0] // Holds an object within the resulting items
