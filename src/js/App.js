@@ -11,13 +11,17 @@ class App {
         window.addEventListener('ready-data', this.displayCard.bind(this));
     }
 
-    displayCard(event) {
+    async displayCard(event) {
         console.log(event.detail);
 
         const {items: recommendations} = event.detail;
 
         for (const obj of recommendations) {
             const card = document.createElement('rtn-card');
+            let photosData = await FourSquareStore.retrive(['group=venue', 'offset=5'], 'photos', obj.venue.id);
+            let tipsData = await FourSquareStore.retrive(['sort=popular','offset=5'],'tips', obj.venue.id);
+            console.log(tipsData);
+            card.details = {photosData: photosData.response.photos, tipsData: tipsData.response.tips};
             card.recommendations = obj.venue;
             this.cardSection.append(card);
         }

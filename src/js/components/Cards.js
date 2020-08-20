@@ -5,6 +5,8 @@ export class Cards extends HTMLElement {
 
         this.attachShadow({ mode : 'open' });
         this.venue = null;
+        this.venuePhotos = null;
+        this.venueTips = null;
     }
 
     render() {
@@ -22,10 +24,11 @@ export class Cards extends HTMLElement {
                 blockquote{
                     font-style: italic;
                     margin: 0;
+                    font-size: 16px;
                 }
 
                 img{
-                    display: block
+                    display: block;
                 }
 
                 .group{
@@ -39,12 +42,10 @@ export class Cards extends HTMLElement {
             </style>
 
             <div class="card">
-                <img src="https://picsum.photos/id/1060/300/200" alt="Example image from Foursquare Venue">
+                <img src="${this.venuePhotos[0].prefix+ '300x200' +this.venuePhotos[0].suffix}" alt="Example image from Foursquare Venue">
                 <div class="group">
                     <h3>${this.venue.name}</h3>
-                    <blockquote>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, 
-                        porro quisquam est qui dolorem ipsum quia dolor sit ametadipisci velit..."
-                    </blockquote>
+                    <blockquote>${this.venueTips[0].text}</blockquote>
                     <p class="location"><b>Ubicación:</b> ${this.analyseInfo()}</p>
                 </div>
             </div>
@@ -54,6 +55,14 @@ export class Cards extends HTMLElement {
     set recommendations(value){
         this.venue = value;
         this.render();
+    }
+
+    set details(value){
+        let {items: venuePhotos} = value.photosData;
+        let {items: venueTips} = value.tipsData;
+
+        this.venuePhotos = venuePhotos;
+        this.venueTips = venueTips;
     }
 
     analyseInfo(){
