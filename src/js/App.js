@@ -19,13 +19,13 @@ class App {
         for (const obj of recommendations) {
             const card = document.createElement('rtn-card');
             
-            card.details = this.gatherCardDetails(obj);
+            card.details = await this.gatherCardDetails(obj);
             card.recommendations = obj.venue;
             this.cardSection.append(card);
         }
     }
 
-    gatherCardDetails(obj){
+    async gatherCardDetails(obj){
         let photosData = await FourSquareStore.retrive(['group=venue', 'offset=5'], 'photos', obj.venue.id);
         let tipsData = await FourSquareStore.retrive(['sort=popular','offset=5'],'tips', obj.venue.id);
 
