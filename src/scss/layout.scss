@@ -1,0 +1,17 @@
+/*Layout styles*/
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 10px;
+    gap: 20px;
+}
+
+.card-section{
+    display: grid;
+    align-content: space-evenly;
+}
+
+.controls-section{ 
+    width: 70%; 
+    min-height: 100vh;
+}

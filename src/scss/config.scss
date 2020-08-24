@@ -46,8 +46,6 @@ body{
     background-color: $color-bg;
 }
 
-.controls-section{
-    background-color: #ffffff; 
-    width:40%; 
-    height: 100vh;
+section:first-child{
+    background-color: $color-light-shades;
 }
