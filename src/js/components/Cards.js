@@ -15,7 +15,7 @@ export class Cards extends HTMLElement {
 
                 .card{
                     display: flex;
-                    width: 50%;
+                    width: 100%;
                     background-color: var(--color-light-shades);
                     color: var(--color-text);
                     box-shadow: 0px 0px 12px -3px rgba(52,63,62,1);
@@ -25,6 +25,10 @@ export class Cards extends HTMLElement {
                     font-style: italic;
                     margin: 0;
                     font-size: 16px;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;  
+                    overflow: hidden;
                 }
 
                 img{
@@ -33,7 +37,7 @@ export class Cards extends HTMLElement {
 
                 .group{
                     padding: 15px;
-                    width: 70%;
+                    width: 100%;
                 }
 
                 .location{
