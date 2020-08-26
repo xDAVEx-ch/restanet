@@ -1,6 +1,7 @@
 import '../scss/main.scss';
 import './components/Controls';
 import './components/Cards';
+import './components/modal-loader';
 import { FourSquareStore } from './stores/FourSquareStore';
 
 class App {
