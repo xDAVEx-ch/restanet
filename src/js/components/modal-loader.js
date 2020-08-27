@@ -4,6 +4,9 @@ class ModalLoader extends HTMLElement{
 
         this.attachShadow({ mode: 'open'});
         this.render();
+        
+        this.modalLoader = this.shadowRoot.querySelector('.modal-loader');
+        this.backdrop = this.shadowRoot.querySelector('.backdrop');
     }
 
     render(){
@@ -17,6 +20,7 @@ class ModalLoader extends HTMLElement{
                     top: 0;
                     left: 0;
                     opacity: 0.5;
+                    visibility: hidden;
                     z-index: 10;
                 }
 
@@ -28,8 +32,13 @@ class ModalLoader extends HTMLElement{
                     position: fixed;
                     left: 30%;
                     top: 25vh;
+                    visibility: hidden;
                     text-align: center;
                 }
+
+                * ----------------------------------------
+                * Modal animations
+                * ----------------------------------------
 
                 .lds-dual-ring {
                     display: inline-block;
@@ -42,7 +51,7 @@ class ModalLoader extends HTMLElement{
                     display: block;
                     width: 64px;
                     height: 64px;
-                    margin: 8px;
+                    margin: 0 auto;
                     border-radius: 50%;
                     border: 6px solid var(--color-accent);
                     border-color: var(--color-accent) transparent var(--color-accent) transparent;
@@ -59,6 +68,9 @@ class ModalLoader extends HTMLElement{
                     }
                 }
 
+                .display{
+                    visibility: visible;
+                }
             </style>
 
             <div class="backdrop"></div>
@@ -67,6 +79,18 @@ class ModalLoader extends HTMLElement{
                     <div class="lds-dual-ring"></div>
             </div>
         `;
+    }
+
+    show(){
+        this.backdrop.classList.add('display');
+        this.modalLoader.classList.add('scale-up-from-center');
+        this.modalLoader.classList.add('display');
+    }
+
+    hide(){
+        this.backdrop.classList.remove('display');
+        this.modalLoader.classList.remove('scale-up-from-center');
+        this.modalLoader.classList.remove('display');
     }
 }
 

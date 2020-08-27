@@ -1,4 +1,5 @@
 import { FourSquareStore } from "../stores/FourSquareStore";
+import { ModalService } from '../services/ModalService';
 export class Controls extends HTMLElement {
 
     constructor() {
@@ -99,6 +100,8 @@ export class Controls extends HTMLElement {
 
     locateUser() {
 
+        ModalService.add('rtn-modal-loader');
+
         navigator.geolocation.getCurrentPosition(position => {
             const coords = {
                 xLong: position.coords.longitude,
@@ -118,6 +121,8 @@ export class Controls extends HTMLElement {
         } else {
             this.inputs[1].removeAttribute('placeholder');
         }
+
+        ModalService.remove();
     }
 
     inputValidation() {
