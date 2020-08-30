@@ -2,6 +2,7 @@ import '../scss/main.scss';
 import './components/Controls';
 import './components/Cards';
 import './components/modal-loader';
+import './components/modal-notification';
 import { FourSquareStore } from './stores/FourSquareStore';
 
 class App {
@@ -16,6 +17,7 @@ class App {
         console.log(event.detail);
 
         const {items: recommendations} = event.detail;
+        this.cardSection.innerHTML = '';
 
         for (const obj of recommendations) {
             const card = document.createElement('rtn-card');
