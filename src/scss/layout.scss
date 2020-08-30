@@ -8,7 +8,8 @@
 
 .card-section{
     display: grid;
-    align-content: space-evenly;
+    column-gap: 15px;
+    padding-top: 15px;
 }
 
 .controls-section{ 

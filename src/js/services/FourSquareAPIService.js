@@ -25,7 +25,7 @@ export const FourSquareAPIService = (() => {
         let endpoint = newEndpoint;
         let venueIdParameter = idParameter;
 
-        let url = `https://api.foursquare.com/v2/venues${'/'+venueIdParameter}/${endpoint}?client_id=${clientId}&client_secret=${clientSecret}&v=20190425&limit=2`;
+        let url = `https://api.foursquare.com/v2/venues${'/'+venueIdParameter}/${endpoint}?client_id=${clientId}&client_secret=${clientSecret}&v=20190425&limit=3`;
 
         return url;
       }
