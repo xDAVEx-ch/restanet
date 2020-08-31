@@ -16,7 +16,7 @@ class ModalNotification extends HTMLElement{
 
     hide(){
         this.backdrop.classList.remove('display');
-        this.modalLoader.classList.remove('display');
+        this.modalNotification.classList.remove('display');
     }
 
     show(){
