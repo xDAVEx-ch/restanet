@@ -1,0 +1,21 @@
+.controls-section{
+    transition: margin-left 0.5s;
+    transition-timing-function: ease-out;
+
+    @media screen and (max-width: 1099px) {
+        margin-left: -70%;
+        position: fixed;
+    }
+
+    @media screen and (max-width: 420px) {
+        width: 90%;
+        margin-left: -90%;
+    }
+}
+
+.container {
+    @media screen {
+        grid-template-columns: 1fr;
+        justify-content: center;
+    }
+}
