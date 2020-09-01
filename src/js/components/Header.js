@@ -18,29 +18,15 @@ class Header extends HTMLElement{
 
     createCustomEvent(){
 
-        let margin = this.establishMargin();
-
         const headerEvent = new CustomEvent('controls-visibility', {
             bubbles: true,  // bubble event to containing elements
             composed: true, // let the event pass through the shadowDOM boundary
-            detail: [this.btnAction ? 'visible' : 'hidden', margin]
+            detail: this.btnAction ? 'visible' : 'hidden'
         });
 
         this.dispatchEvent(headerEvent);
 
         this.btnAction = !this.btnAction;
-    }
-
-    establishMargin(){
-        let margin = null;
-
-        if(this.offsetWidth > 420) {
-            margin = '-70%';
-        } else {
-            margin = '-90%';
-        }
-
-        return margin;
     }
 
     render(){
@@ -51,8 +37,12 @@ class Header extends HTMLElement{
                     background-color: var(--color-brand);
                     color: var(--color-text);
                     justify-content: space-between;
-                    padding: 2px 20px;
+                    padding: 0 10px;
                     align-items: center;
+                    position: fixed;
+                    width: 100%;
+                    box-sizing: border-box;
+                    height: 70px;
                 }
 
                 img{
@@ -63,6 +53,12 @@ class Header extends HTMLElement{
 
                 img:hover{
                     cursor: pointer;
+                }
+
+                @media screen and (min-width: 1099px){
+                    header{
+                        display: none;
+                    }
                 }
 
             </style>

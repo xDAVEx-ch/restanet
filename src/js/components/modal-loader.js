@@ -71,6 +71,20 @@ class ModalLoader extends HTMLElement{
                 .display{
                     visibility: visible;
                 }
+
+                @media screen and (max-width: 900px){
+                    .modal-loader{
+                        width: 70%;
+                        left: 15%;
+                    }
+                }
+
+                @media screen and (max-width: 500px){
+                    .modal-loader{
+                        width: 90%
+                        left: 5%;
+                    }
+                }
             </style>
 
             <div class="backdrop"></div>
