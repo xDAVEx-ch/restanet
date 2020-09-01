@@ -15,6 +15,22 @@ class App {
 
         window.addEventListener('ready-data', this.displayCard.bind(this));
         window.addEventListener('controls-visibility', this.manageControlsVisibility.bind(this));
+        window.addEventListener('resize', this.resetState.bind(this));
+        document.addEventListener('DOMContentLoaded', this.activateAnimations);
+    }
+
+    activateAnimations(){
+        let node = document.querySelector('.preload-transitions');
+        node.classList.remove('preload-transitions');
+    }
+
+    resetState(){
+        if(window.offsetWidth < 1099){
+            return null;
+        } else {
+            this.controlsSection.classList.remove('is-controls-active');
+            this.controlsSection.style.top = '70px';
+        }
     }
 
     async displayCard(event) {
@@ -35,7 +51,7 @@ class App {
     async gatherCardDetails(obj){
         let photosData = await FourSquareStore.retrive(['group=venue', 'offset=5'], 'photos', obj.venue.id);
         let tipsData = await FourSquareStore.retrive(['sort=popular','offset=5'],'tips', obj.venue.id);
-
+        console.log(photosData.response.photos);
         return {
             photosData: photosData.response.photos,
             tipsData: tipsData.response.tips
@@ -44,11 +60,12 @@ class App {
 
     manageControlsVisibility(event){
 
-        if(event.detail[0] === 'visible'){
-            this.controlsSection.style.marginLeft = '0%';
+        if(event.detail === 'visible'){
+            this.controlsSection.classList.add('is-controls-active');
             console.log('visible');
         } else {
-            this.controlsSection.style.marginLeft = event.detail[1];   
+            this.controlsSection.classList.remove('is-controls-active');
+            this.controlsSection.style.top = '70px';
             console.log('hidden');
         }
     }
