@@ -4,15 +4,42 @@
     display: grid;
     grid-template-columns: 1fr 1fr 10px;
     gap: 20px;
+
+    @media screen and (max-width: 1099px) {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 }
 
 .card-section{
     display: grid;
     column-gap: 15px;
     padding-top: 15px;
+
+    @media screen and (max-width: 1099px){
+        grid-template-columns: 1fr;
+        justify-content: center;
+        padding: 15px 50px;
+    }
+
+    @media screen and (max-width: 420px) {
+        padding: 0 10px;
+    }
 }
 
 .controls-section{ 
     width: 70%; 
     min-height: 100vh;
+
+    @media screen and (max-width: 1099px) {
+        margin-left: -70%;
+        position: fixed;
+        transition: margin-left 0.5s;
+        transition-timing-function: ease-out;
+    }
+
+    @media screen and (max-width: 420px) {
+        width: 90%;
+        margin-left: -90%;
+    }
 }
