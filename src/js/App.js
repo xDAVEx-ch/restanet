@@ -2,8 +2,8 @@ import '../scss/main.scss';
 import './components/Controls';
 import './components/Cards';
 import './components/Header';
-import './components/modal-loader';
-import './components/modal-notification';
+import './components/Modal-loader';
+import './components/Modal-notification';
 import { FourSquareStore } from './stores/FourSquareStore';
 
 class App {
