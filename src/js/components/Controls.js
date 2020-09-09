@@ -1,13 +1,12 @@
-import { FourSquareStore } from "../stores/FourSquareStore";
-import { ModalService } from '../services/ModalService';
-export class Controls extends HTMLElement {
+import { FourSquareStore } from '../stores/FourSquareStore'
+import { ModalService } from '../services/ModalService'
+export class Controls extends window.HTMLElement {
+  constructor () {
+    super()
 
-    constructor() {
-        super();
-
-        this.attachShadow({ mode: 'open' });
-        this.userLocation = null;
-        this.shadowRoot.innerHTML = `
+    this.attachShadow({ mode: 'open' })
+    this.userLocation = null
+    this.shadowRoot.innerHTML = `
             <style>
                 form{
 
@@ -89,105 +88,94 @@ export class Controls extends HTMLElement {
 
                 <button id="find" class="find" type="button">Buscar</button>
             </form>
-        `;
-        this.inputs = this.shadowRoot.querySelectorAll('input');
+        `
+    this.inputs = this.shadowRoot.querySelectorAll('input')
 
-        const findButton = this.shadowRoot.getElementById('find');
-        const locatedUserBtn = this.shadowRoot.getElementById('locate-me');
-        locatedUserBtn.addEventListener('click', this.locateUser.bind(this));
-        findButton.addEventListener('click', this.findPlacesHandler.bind(this));
+    const findButton = this.shadowRoot.getElementById('find')
+    const locatedUserBtn = this.shadowRoot.getElementById('locate-me')
+    locatedUserBtn.addEventListener('click', this.locateUser.bind(this))
+    findButton.addEventListener('click', this.findPlacesHandler.bind(this))
+  }
+
+  locateUser () {
+    ModalService.add('rtn-modal-loader')
+
+    navigator.geolocation.getCurrentPosition(position => {
+      const coords = {
+        xLong: position.coords.longitude,
+        yLat: position.coords.latitude
+      }
+
+      this.userLocation = coords
+      this.changeAttribute()
+    }, () => window.alert('No es posible usar su ubicación, por favor, inserte una manualmente'))
+  }
+
+  changeAttribute () {
+    if (this.userLocation) {
+      this.inputs[1].setAttribute('placeholder', 'Usando mi ubicación')
+    } else {
+      this.inputs[1].removeAttribute('placeholder')
     }
 
-    locateUser() {
+    ModalService.remove()
+  }
 
-        ModalService.add('rtn-modal-loader');
-
-        navigator.geolocation.getCurrentPosition(position => {
-            const coords = {
-                xLong: position.coords.longitude,
-                yLat: position.coords.latitude
-            }
-
-            this.userLocation = coords;
-            this.changeAttribute();
-
-        }, error => alert('No es posible usar su ubicación, por favor, inserte su una manualmente'));
+  inputValidation () {
+    if (this.inputs[0].value.trim() === '') {
+      throw new Error('Necesita insertar un tipo de comida en el primer campo')
     }
 
-    changeAttribute() {
-
-        if (this.userLocation) {
-            this.inputs[1].setAttribute('placeholder', 'Usando mi ubicación');
-        } else {
-            this.inputs[1].removeAttribute('placeholder');
-        }
-
-        ModalService.remove();
+    if (this.inputs[1].value.trim() === '' && this.userLocation === null) {
+      throw new Error('Necesita usar una ubicación, puede ser manual o usando el botton: "Mi ubicación"')
     }
+  }
 
-    inputValidation() {
-
-        if (this.inputs[0].value.trim() === '') {
-            throw new Error('Necesita insertar un tipo de comida en el primer campo');
-        }
-
-        if (this.inputs[1].value.trim() === '' && this.userLocation === null) {
-            throw new Error('Necesita usar una ubicación, puede ser manual o usando el botton: "Mi ubicación"');
-        }
+  findPlacesHandler () {
+    try {
+      this.inputValidation(this.inputs)
+      this.getInformation(this.inputs)
+    } catch (error) {
+      window.alert(error.message)
     }
+  }
 
-    findPlacesHandler() {
+  async getInformation () {
+    let recommendations = null
 
-        try {
-            this.inputValidation(this.inputs);
-            this.getInformation(this.inputs);
-        } catch (error) {
-            alert(error.message);
-        }
+    if (this.userLocation && this.inputs[1].value === '') {
+      recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore')
+      this.createCustomEvent(recommendations)
+    } else {
+      recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore')
+      this.createCustomEvent(recommendations)
+      this.userLocation = null
+      this.changeAttribute()
     }
+  }
 
-    async getInformation() {
+  createParameter () {
+    if (this.userLocation && this.inputs[1].value === '') {
+      const { xLong: longitude, yLat: latitude } = this.userLocation
+      const coordenates = `${latitude},${longitude}`
 
-        let recommendations = null;
-
-        if (this.userLocation && this.inputs[1].value === '') {
-            
-            recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore');
-            console.log(recommendations);
-            this.createCustomEvent(recommendations);
-        } else {
-            recommendations = await FourSquareStore.retrive(this.createParameter(), 'explore');
-            this.createCustomEvent(recommendations);
-            this.userLocation = null;
-            this.changeAttribute();
-        }
+      // Concat ll and query parameters to the FourSquareAPI
+      return ['ll=' + coordenates, '&query=' + this.inputs[0].value]
+    } else {
+      // Concat near and query parameters to the FourSquareAPI
+      return ['near=' + this.inputs[1].value, '&query=' + this.inputs[0].value]
     }
+  }
 
-    createParameter() {
+  createCustomEvent (recommendations) {
+    const controlsEvent = new window.CustomEvent('ready-data', {
+      bubbles: true, // bubble event to containing elements
+      composed: true, // let the event pass through the shadowDOM boundary
+      detail: recommendations.response.groups[0] // Holds an object within the resulting items
+    })
 
-        let parameters = null;
-
-        if (this.userLocation && this.inputs[1].value === '') {
-            const { xLong: longitude, yLat: latitude } = this.userLocation;
-            const coordenates = `${latitude},${longitude}`;
-
-            //Concat ll and query parameters to the FourSquareAPI
-            return parameters = ['ll=' + coordenates, '&query=' + this.inputs[0].value];
-        } else {
-            //Concat near and query parameters to the FourSquareAPI
-            return parameters = ['near=' + this.inputs[1].value, '&query=' + this.inputs[0].value];
-        }
-    }
-
-    createCustomEvent(recommendations) {
-        const controlsEvent = new CustomEvent('ready-data', {
-            bubbles: true,  // bubble event to containing elements
-            composed: true, // let the event pass through the shadowDOM boundary
-            detail: recommendations.response.groups[0] // Holds an object within the resulting items
-        });
-
-        this.dispatchEvent(controlsEvent);
-    }
+    this.dispatchEvent(controlsEvent)
+  }
 }
 
-customElements.define('rtn-controls', Controls);
+window.customElements.define('rtn-controls', Controls)

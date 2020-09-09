@@ -1,31 +1,30 @@
-class ModalNotification extends HTMLElement{
+class ModalNotification extends window.HTMLElement {
+  constructor () {
+    super()
 
-    constructor(){
-        super();
+    this.attachShadow({ mode: 'open' })
+    this.render()
 
-        this.attachShadow({mode: 'open'});
-        this.render();
+    this.modalNotification = this.shadowRoot.querySelector('.modal-notification')
+    this.backdrop = this.shadowRoot.querySelector('.backdrop')
+  }
 
-        this.modalNotification = this.shadowRoot.querySelector('.modal-notification');
-        this.backdrop = this.shadowRoot.querySelector('.backdrop');
-    }
+  connectedCallback () {
+    this.modalNotification.addEventListener('click', this.hide())
+  }
 
-    connectedCallback(){
-        this.modalNotification.addEventListener('click', this.hide());
-    }
+  hide () {
+    this.backdrop.classList.remove('display')
+    this.modalNotification.classList.remove('display')
+  }
 
-    hide(){
-        this.backdrop.classList.remove('display');
-        this.modalNotification.classList.remove('display');
-    }
+  show () {
+    this.backdrop.classList.add('display')
+    this.modalLoader.classList.add('display')
+  }
 
-    show(){
-        this.backdrop.classList.add('display');
-        this.modalLoader.classList.add('display');
-    }
-
-    render(){
-        this.shadowRoot.innerHTML = `
+  render () {
+    this.shadowRoot.innerHTML = `
             <style>
                 .backdrop{
                     background-color: #000;
@@ -97,8 +96,8 @@ class ModalNotification extends HTMLElement{
                         ubicaciones son reales.
                     <p>
             </div>
-        `;
-    }
+        `
+  }
 }
 
-customElements.define('rtn-modal-notification', ModalNotification);
+window.customElements.define('rtn-modal-notification', ModalNotification)

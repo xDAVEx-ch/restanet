@@ -25,5 +25,9 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^5.1.0"
+  },
+  "dependencies": {
+    "natural": "^2.1.5",
+    "sentiment": "^5.0.2"
   }
 }

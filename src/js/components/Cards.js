@@ -1,18 +1,17 @@
-import { ModalService } from '../services/ModalService';
+import { ModalService } from '../services/ModalService'
 
-export class Cards extends HTMLElement {
+export class Cards extends window.HTMLElement {
+  constructor () {
+    super()
 
-    constructor() {
-        super();
+    this.attachShadow({ mode: 'open' })
+    this.venue = null
+    this.venuePhotos = null
+    this.venueTips = null
+  }
 
-        this.attachShadow({ mode: 'open' });
-        this.venue = null;
-        this.venuePhotos = null;
-        this.venueTips = null;
-    }
-
-    render() {
-        this.shadowRoot.innerHTML = `
+  render () {
+    this.shadowRoot.innerHTML = `
             <style>
 
                 .card{
@@ -56,45 +55,42 @@ export class Cards extends HTMLElement {
                     <p class="location"><b>Ubicación:</b> ${this.analyseInfo()}</p>
                 </div>
             </div>
-        `;
+        `
+  }
+
+  set recommendations (value) {
+    this.venue = value
+    this.render()
+  }
+
+  set details (value) {
+    if (value.photosData) {
+      const { items: venuePhotos } = value.photosData
+      const { items: venueTips } = value.tipsData
+
+      this.venuePhotos = venuePhotos[0].prefix + '300x200' + venuePhotos[0].suffix
+      this.venueTips = venueTips[0].text
+    } else {
+      this.venuePhotos = 'https://picsum.photos/id/1060/300/200'
+      this.venueTips = 'Me llevaron para celebrar mi cumpleaños. Un buen lugar para comer en familia. Que rico todo el menú.'
+
+      ModalService.add('rtn-modal-notification')
+    }
+  }
+
+  analyseInfo () {
+    let location = ''
+
+    if (this.venue.location.city === undefined && this.venue.location.address === undefined) {
+      location = 'No disponible'
+    } else if (this.venue.location.city === undefined) {
+      location = this.venue.location.address
+    } else {
+      location = `${this.venue.location.city}, ${this.venue.location.address}`
     }
 
-    set recommendations(value) {
-        this.venue = value;
-        this.render();
-    }
-
-    set details(value) {
-
-        if (value.photosData) {
-            let { items: venuePhotos } = value.photosData;
-            let { items: venueTips } = value.tipsData;
-
-            this.venuePhotos = venuePhotos[0].prefix+ '300x200' +venuePhotos[0].suffix;
-            this.venueTips = venueTips[0].text;
-        }else{
-            this.venuePhotos = 'https://picsum.photos/id/1060/300/200';
-            this.venueTips = 'Me llevaron para celebrar mi cumpleaños. Un buen lugar para comer en familia. Que rico todo el menú.';
-
-            ModalService.add('rtn-modal-notification');
-        }
-
-    }
-
-    analyseInfo() {
-
-        let location = '';
-
-        if (this.venue.location.city === undefined && this.venue.location.address === undefined) {
-            location = 'No disponible';
-        } else if (this.venue.location.city === undefined) {
-            location = this.venue.location.address;
-        } else {
-            location = `${this.venue.location.city}, ${this.venue.location.address}`;
-        }
-
-        return location;
-    }
+    return location
+  }
 }
 
-customElements.define('rtn-card', Cards);
+window.customElements.define('rtn-card', Cards)

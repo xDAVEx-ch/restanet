@@ -1,36 +1,34 @@
-import img from '../../assets/hamburger-menu.png';
+import img from '../../assets/hamburger-menu.png'
 
-class Header extends HTMLElement{
+class Header extends window.HTMLElement {
+  constructor () {
+    super()
 
-    constructor() {
-        super();
+    this.attachShadow({ mode: 'open' })
+    this.render()
 
-        this.attachShadow({ mode : 'open'});
-        this.render();
+    this.hamburgerBtn = this.shadowRoot.querySelector('img')
+    this.btnAction = true
+  }
 
-        this.hamburgerBtn = this.shadowRoot.querySelector('img');
-        this.btnAction = true;
-    }
+  connectedCallback () {
+    this.hamburgerBtn.addEventListener('click', this.createCustomEvent.bind(this))
+  }
 
-    connectedCallback(){
-        this.hamburgerBtn.addEventListener('click', this.createCustomEvent.bind(this));
-    }
+  createCustomEvent () {
+    const headerEvent = new window.CustomEvent('controls-visibility', {
+      bubbles: true, // bubble event to containing elements
+      composed: true, // let the event pass through the shadowDOM boundary
+      detail: this.btnAction ? 'visible' : 'hidden'
+    })
 
-    createCustomEvent(){
+    this.dispatchEvent(headerEvent)
 
-        const headerEvent = new CustomEvent('controls-visibility', {
-            bubbles: true,  // bubble event to containing elements
-            composed: true, // let the event pass through the shadowDOM boundary
-            detail: this.btnAction ? 'visible' : 'hidden'
-        });
+    this.btnAction = !this.btnAction
+  }
 
-        this.dispatchEvent(headerEvent);
-
-        this.btnAction = !this.btnAction;
-    }
-
-    render(){
-        this.shadowRoot.innerHTML = `
+  render () {
+    this.shadowRoot.innerHTML = `
             <style>
                 header{
                     display: flex;
@@ -67,8 +65,8 @@ class Header extends HTMLElement{
                 <h2>Restanet</h2>
                 <img src="${img}" alt="Hamburger menu">
             </header>
-        `;
-    }
+        `
+  }
 }
 
-customElements.define('rtn-header', Header);
+window.customElements.define('rtn-header', Header)

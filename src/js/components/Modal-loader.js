@@ -1,16 +1,16 @@
-class ModalLoader extends HTMLElement{
-    constructor(){
-        super();
+class ModalLoader extends window.HTMLElement {
+  constructor () {
+    super()
 
-        this.attachShadow({ mode: 'open'});
-        this.render();
-        
-        this.modalLoader = this.shadowRoot.querySelector('.modal-loader');
-        this.backdrop = this.shadowRoot.querySelector('.backdrop');
-    }
+    this.attachShadow({ mode: 'open' })
+    this.render()
 
-    render(){
-        this.shadowRoot.innerHTML = `
+    this.modalLoader = this.shadowRoot.querySelector('.modal-loader')
+    this.backdrop = this.shadowRoot.querySelector('.backdrop')
+  }
+
+  render () {
+    this.shadowRoot.innerHTML = `
             <style>
                 .backdrop{
                     background-color: #000;
@@ -92,20 +92,20 @@ class ModalLoader extends HTMLElement{
                     <h3>Cargando su ubicación</h3>
                     <div class="lds-dual-ring"></div>
             </div>
-        `;
-    }
+        `
+  }
 
-    show(){
-        this.backdrop.classList.add('display');
-        this.modalLoader.classList.add('scale-up-from-center');
-        this.modalLoader.classList.add('display');
-    }
+  show () {
+    this.backdrop.classList.add('display')
+    this.modalLoader.classList.add('scale-up-from-center')
+    this.modalLoader.classList.add('display')
+  }
 
-    hide(){
-        this.backdrop.classList.remove('display');
-        this.modalLoader.classList.remove('scale-up-from-center');
-        this.modalLoader.classList.remove('display');
-    }
+  hide () {
+    this.backdrop.classList.remove('display')
+    this.modalLoader.classList.remove('scale-up-from-center')
+    this.modalLoader.classList.remove('display')
+  }
 }
 
-customElements.define('rtn-modal-loader', ModalLoader);
+window.customElements.define('rtn-modal-loader', ModalLoader)
