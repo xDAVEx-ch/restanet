@@ -4,7 +4,6 @@ import './components/Cards'
 import './components/Header'
 import './components/Modal-loader'
 import './components/Modal-notification'
-import './services/NaturalAnlysService'
 import { FourSquareStore } from './stores/FourSquareStore'
 
 class App {
@@ -66,4 +65,4 @@ class App {
   }
 }
 
-App()
+new App()
