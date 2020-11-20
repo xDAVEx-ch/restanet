@@ -9,7 +9,7 @@ people's experiences from Foursquare API.
 
 ## Preview
 
-If you just want to proof about the final result of the project, go and get a copy
+If you just want to check out the final result of the project, go and get a copy
 of it in dist folder.
 
 ![Restanet preview image](preview\restanet-preview.png)
